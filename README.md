@@ -153,3 +153,6 @@ fn handle_connection(mut stream: TcpStream) {
 3. Bukti bahwa sudah dapat menangani jika path tidak sesuai:
 ![Commit 3 screen capture](assets/images/commit3.png)
 
+#### COMMIT 4 REFLECTION NOTES
+
+Dalam fungsi `handle_connection` yang sudah diperbarui, penggunaan `match` digunakan untuk memeriksa `request_line` dan menentukan respons berdasarkan pola yang cocok, termasuk permintaan untuk `/,` `/sleep`, dan kasus lainnya. Penambahan endpoint `/sleep` menunjukkan bagaimana server single-threaded dapat mengalami penundaan saat memproses permintaan yang membutuhkan waktu lama, diilustrasikan dengan menunda pemrosesan selama 10 detik menggunakan `thread::sleep(Duration::from_secs(10))`. Perubahan menggunakan match untuk `if` `else` menyederhanakan kode dan memungkinkan penanganan permintaan yang berbeda dengan lebih efisien. Namun, penggunaan single thread dalam server dapat menghasilkan penundaan dalam merespons permintaan lain, mengganggu pengalaman pengguna yang membutuhkan respons cepat. Pada simulasi slow response, pengguna harus menunggu permintaan diproses secara berurutan karena sifat single-threaded dari server, terutama ketika mencoba mengakses `/sleep` dan endpoint lain secara bergantian. Hal ini menyoroti dampak negatif penggunaan single thread pada respons server dalam situasi di mana respon cepat sangat penting.
