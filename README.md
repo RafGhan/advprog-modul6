@@ -2,7 +2,7 @@
 ### Rafi Ghani Harditama (2206081364)
 ### Advanced Programming A/VRO
 
-## COMMIT 1 REFLECTION NOTES
+#### COMMIT 1 REFLECTION NOTES
 
 Yang dilakukan oleh fungsi `handle_connection`:
 ``` rust
@@ -40,3 +40,42 @@ println!("Request: {:#?}", http_request);
 ```
 
 Baris ini mencetak `http_request` ke konsol. `{:#?}` digunakan untuk mencetak struktur data secara format dengan lebih mudah dibaca. 
+
+#### COMMIT 2 REFLECTION NOTES
+
+![Commit 2 screen capture](assets/images/commit2.png)
+
+Tambahan kode pada fungsi `handle_connection` di `main.rs`:
+```rust
+    let status_line = "HTTP/1.1 200 OK";
+    let contents = fs::read_to_string("hello.html").unwrap();
+    let length = contents.len();
+
+    let response =
+        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
+    stream.write_all(response.as_bytes()).unwrap();
+```
+
+* penjelasan per line:
+``` rust
+ let status_line = "HTTP/1.1 200 OK";
+```
+Baris ini mendefinisikan status line yang akan dikirimkan sebagai bagian dari respons HTTP. Ini menunjukkan bahwa respons akan memiliki kode status 200, yang berarti "OK".
+
+```rust
+let contents = fs::read_to_string("hello.html").unwrap();
+```
+Baris ini membaca isi dari file `hello.html` dan menyimpannya dalam variabel `contents`
+
+``` rust
+    let response =
+        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+```
+
+Baris ini menghitung panjang konten yang akan dikirimkan dalam respons HTTP. Baris ini membuat respons HTTP dengan menggabungkan status line, panjang konten, dan konten itu sendiri ke dalam satu string menggunakan format string. `\r\n` digunakan untuk menambahkan karakter newline yang diperlukan dalam spesifikasi HTTP.
+
+``` rust
+stream.write_all(response.as_bytes()).unwrap();
+```
+Baris ini menuliskan respons HTTP ke dalam stream sebagai bytes. 
